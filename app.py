@@ -2,11 +2,10 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, db_drop_and_create_all, Animal, Location
+from models import setup_db, db_drop_and_create_all, Animal, Species
 import random
 
 ANIMALS_PER_PAGE = 10
-LOCATIONS_PER_PAGE = 3
 
 def paginate_animals(request, selection):
 
@@ -19,16 +18,6 @@ def paginate_animals(request, selection):
 
     return active_animals
 
-def paginate_locations(request, selection):
-
-    page = request.args.get('page', 1, type=int)
-    start = (page - 1) * LOCATIONS_PER_PAGE
-    end = start + LOCATIONS_PER_PAGE
-
-    locations = [question.format() for question in selection]
-    active_locations = locations[start:end]
-
-    return active_locations
 
 def create_app(test_config=None):
   # create and configure the app
@@ -43,7 +32,7 @@ def create_app(test_config=None):
   THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
   '''
   
-  # db_drop_and_create_all()
+  db_drop_and_create_all()
   
   
   @app.after_request
@@ -87,8 +76,28 @@ def create_app(test_config=None):
       # return the dictionary of animals and the number of animals
       return jsonify({
           'success': True,
-          'categories': active_animals,
+          'animals': active_animals,
           'number': len(animals)
+      })
+
+  @app.route('/species', methods=['GET'])
+  def get_species():
+      species = Species.query.order_by(Species.id).all()
+
+      # Abort if no species are returned
+      if len(species) == 0:
+          abort(404)
+      
+      # Format species in a dictionary
+      active_species = {}
+      for specie in species:
+          active_species[specie.id] = specie.name
+
+      # return the dictionary of species and the number of species
+      return jsonify({
+          'success': True,
+          'species': active_species,
+          'number': len(species)
       })
 
   @app.route('/animals', methods=['POST'])
@@ -99,6 +108,7 @@ def create_app(test_config=None):
       new_species = body.get('species', None)
       new_age = body.get('age', None)
       new_comment = body.get('comment', None)
+      new_species_id = body.get('species_id', None)
 
       # check if any required input is missing and abort
       if new_name is None:
@@ -109,12 +119,15 @@ def create_app(test_config=None):
           abort(400)
       if new_comment is None:
           abort(400)
+      if new_species_id is None:
+          abort(400)
 
       try:
         animal = Animal(name = new_name,
                         species = new_species,
                         age = new_age,
-                        comment = new_comment)
+                        comment = new_comment,
+                        species_id = new_species_id)
         
         animal.insert()
         
@@ -125,6 +138,7 @@ def create_app(test_config=None):
           'success': True,
           'created': animal.id,
           'animal_created': animal.name,
+          'species_id': animal.species_id,
           'animals': paginated_animals,
           'total_animals': len(animals)
         })
