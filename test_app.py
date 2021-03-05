@@ -30,17 +30,15 @@ class FarmTestCase(unittest.TestCase):
             # db_drop_and_create_all
 
         # sample Animal for the tests
-        self.new_animal1 = {
+        self.new_animal = {
             'name': 'Flash' ,
             'age': '3',
             'comment': 'Flash is a good boy and likes to chase thrown things.',
             'species_id': '1'
         }
-        self.new_animal2 = {
-            'name': 'Hazel' ,
-            'age': '2',
-            'comment': 'Hazel loves carrots.',
-            'species_id': '4'
+        
+        self.new_wrong_animal = {
+            'wrong' : 'JSON'
         }
 
     def tearDown(self):
@@ -48,30 +46,92 @@ class FarmTestCase(unittest.TestCase):
         pass
     
     def test_post_animal(self):
-        res = self.client().post('/animals', json=self.new_animal1)
+        res = self.client().post('/animals', json=self.new_animal)
         data = json.loads(res.data)
 
         # Check for success of creation
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['animal_created'])
-        
-        res = self.client().post('/animals', json=self.new_animal2)
+
+    def test_post_animal_error(self):
+        res = self.client().post('/animals', json=self.new_wrong_animal)
         data = json.loads(res.data)
 
         # Check for success of creation
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertTrue(data['animal_created'])
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(data['success'])
+
+    # Post test for authorization Admin
 
     def test_get_animals(self):
         res = self.client().get('/animals')
         data = json.loads(res.data)
         
-        # Check for success of getting the json
+        # Check for success of the test
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['animals'])
+
+
+    def test_get_animals_via_id(self):
+        res = self.client().get('/animals/1')
+        data = json.loads(res.data)
+        
+        # Check for success of the test
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['Name'])
+
+    def test_get_animals_via_id_error(self):
+        res = self.client().get('/animals/99')
+        data = json.loads(res.data)
+        
+        # Check for success of the test
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+
+    def test_patch_animal(self):
+        json_age = {
+            'age' : 9
+        }
+        res = self.client().patch('/animals/1', json = json_age)
+        data = json.loads(res.data)
+        
+        # Check for success of the test
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['age'],json_age['age'])
+        
+    def test_patch_animal_error(self):
+        json_age = {
+            'iamamnoage' : 9
+        }
+        res = self.client().patch('/animals/1', json = json_age)
+        data = json.loads(res.data)
+        
+        # Check for success of test
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        
+    def test_delete_animal(self):
+        res = self.client().delete('/animals/1')
+        data = json.loads(res.data)
+        
+        # Check for success of test
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_delete_animal_error(self):
+        res = self.client().delete('/animals/999')
+        data = json.loads(res.data)
+        
+        # Check for success of test
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+
+     # Delete test for authorization Admin
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

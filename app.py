@@ -48,7 +48,7 @@ def create_app(test_config=None):
     def start():
         animals = Animal.query.order_by(Animal.id).all()
 
-        if len(animals) == 0:
+        if animals is None:
             return jsonify({'message' : 'Hello there, currently there is no animal here!'
                         })
 
@@ -69,7 +69,7 @@ def create_app(test_config=None):
         animals = Animal.query.order_by(Animal.id).all()
 
         # Abort if no animals are returned
-        if len(animals) == 0:
+        if animals is None:
             abort(404)
         
         # Get all animals and format them
@@ -89,10 +89,15 @@ def create_app(test_config=None):
     def get_animals_by_id(animal_id):
         animals = Animal.query.order_by(Animal.id).all()
         # Abort if no animals are returned
-        if len(animals) == 0:
+        
+        if animals is None:
             abort(404)
 
         animal_filtered = Animal.query.filter(Animal.id==animal_id).one_or_none()
+        
+        if animal_filtered is None:
+            abort(404)
+
         species = Species.query.filter(Species.id == animal_filtered.species_id).one_or_none()
     
         # return the dictionary of animals and the number of animals
@@ -108,7 +113,7 @@ def create_app(test_config=None):
         species = Species.query.order_by(Species.id).all()
 
         # Abort if no species are returned
-        if len(species) == 0:
+        if species is None:
             abort(404)
    
         # Format species in a dictionary
@@ -175,10 +180,12 @@ def create_app(test_config=None):
             animal = Animal.query.filter(Animal.id == animal_id).one_or_none()
             if animal is None:
                 abort(404)
-            if 'age' in body:
-                animal.age = int(body.get('age'))
+            if 'age' not in body:
+                abort(422)
+
+            animal.age = int(body.get('age'))
             animal.update()
-            
+
             return jsonify({
                 'success': True,
                 'animal_id': animal.id,
