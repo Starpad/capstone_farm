@@ -13,12 +13,19 @@ class FarmTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
+        '''
         self.DB_HOST = os.getenv('DB_HOST', '127.0.0.1:5432')
         self.DB_USER = os.getenv('DB_USER', 'postgres')
         self.DB_PASSWORD = os.getenv('DB_PASSWORD', 'padpw')
         self.DB_NAME = os.getenv('DB_NAME', 'capstone_farm')
         self.DB_PATH = "postgres://{}:{}@{}/{}".format(
             self.DB_USER, self.DB_PASSWORD, self.DB_HOST, self.DB_NAME)
+        '''
+
+        # Heroku DB
+        
+        self.DB_PATH = 'postgres://rtmfcdettevdpc:1ab7e5292d255864ac4a0c67193aea7f994a0a5f8c16de26086b49c04206b0a4@ec2-50-19-176-236.compute-1.amazonaws.com:5432/df935uv7s2p4i8'
+        
         setup_db(self.app, self.DB_PATH)
 
         # binds the app to the current context

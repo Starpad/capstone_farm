@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-
+'''
 DB_HOST = os.getenv('DB_HOST', '127.0.0.1:5432')
 DB_USER = os.getenv('DB_USER', 'postgres')
 DB_PASSWORD = os.getenv('DB_PASSWORD', 'padpw')
@@ -14,9 +14,10 @@ DB_NAME = os.getenv('DB_NAME', 'capstone_farm')
 DB_PATH = 'postgresql+psycopg2://{}:{}@{}/{}'.format(
     DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
     )
+'''
 
 # Migrate local DB into Heroku DB
-# DB_PATH = ''
+DB_PATH = 'postgres://rtmfcdettevdpc:1ab7e5292d255864ac4a0c67193aea7f994a0a5f8c16de26086b49c04206b0a4@ec2-50-19-176-236.compute-1.amazonaws.com:5432/df935uv7s2p4i8'
 
 db = SQLAlchemy()
 
