@@ -32,7 +32,7 @@ def create_app(test_config=None):
     THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
     '''
   
-    db_drop_and_create_all()
+    # db_drop_and_create_all()
 
 
     @app.after_request
