@@ -2,6 +2,14 @@
 
 ## Getting Started
 
+## Motivation
+
+This is the final project of the Full-Stack Web Developer Nanodegree. It should cover and test all topics from the course.
+I chose to create my own theme for the project and created a few endpoints for a virtual farm.
+
+The farm has to autohrization roles, one is the guest and the other is the farm manager.
+It will be described down below.
+
 ### Installing Dependencies
 
 #### Python 3.7
@@ -44,6 +52,13 @@ export FLASK_APP=app.py && export FLASK_ENV=development && flask run
 Setting the `FLASK_ENV` variable to `development` will detect file changes and restart the server automatically.
 
 Setting the `FLASK_APP` variable to `app.py ` file to find the application. 
+
+## Data modeling:
+#### models.py
+This file is the schema for the database and has some helper methods to simplyfy the API endpoints in the app.py file
+- Tables created: Animal, Species
+- Animal table is for storing all animals from the farm (colums: id [integer,primary Key], name [string, mandatory], age [integer, mandatory], comment [string], species_id [integer, ForeignKey to Species])
+- Species table is for storing the current species on the farm (columns: id [integer, primary key], name [string, mandatory], description [string], animals [relationship to Animal])
 
 ## REST API Documentation
 
@@ -130,9 +145,23 @@ DELETE '/animals/<int:animal_id>'
 }
 ```
 ## Authentification
+#### auth.py
+
+Auth0 is used as a third party authentication service. There are two roles for this application.
+
+- Guest: A guest can access all 'GET' endpoints in this application and has the permission 'get:animals'
+- Manager: A manager can access all 'GET' endpoints, the 'POST' endpoint, the 'PATCH' endpoint and the 'DELETE' endpoint. He has the permissions 'get:animals', 'post:animals', 'delete:animals'
+
 
 Login: audience=https://capfarm.herokuapp.com&response_type=token
 client_id=mKtioZo3JhgPPyeubzW4mm7qI7VdKAl1&redirect_uri=https://capfarm.herokuapp.com
+
+
+## Heroku Deployment and Base URL
+
+The application is hosted live on Heroku on the following URL:
+
+https://capfarm.herokuapp.com/
 
 ## Testing
 To run the tests, run
