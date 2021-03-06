@@ -6,8 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import setup_db, Animal, Species, db_drop_and_create_all
 
-farm_guest_header = os.environ('GUEST')
-farm_manager_header = os.environ('MANAGER')
+farm_guest_header = os.environ['GUEST']
+farm_manager_header = os.environ['MANAGER']
 
 
 class FarmTestCase(unittest.TestCase):
