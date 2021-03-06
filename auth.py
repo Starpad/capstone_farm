@@ -61,7 +61,6 @@ def get_token_auth_header():
     return token
 
 
-
 def check_permissions(permission, payload):
     # raise Exception('Not Implemented')
     if 'permissions' not in payload:

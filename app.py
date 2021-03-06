@@ -6,7 +6,10 @@ from models import setup_db, db_drop_and_create_all, Animal, Species
 import random
 from auth import AuthError, requires_auth
 
+# create option for paginating animals response
+
 ANIMALS_PER_PAGE = 10
+
 
 def paginate_animals(request, selection):
 
@@ -27,43 +30,49 @@ def create_app(test_config=None):
     setup_db(app)
     # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-
     '''
     uncomment the following line to initialize the datbase
     THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
     '''
-  
-    # db_drop_and_create_all()
 
+    # db_drop_and_create_all()
 
     @app.after_request
     def after_request(response):
         response.headers.add('Access-Control-Allow-Headers',
-                                'Content-Type,Authorization,true')
+                             'Content-Type,Authorization,true')
         response.headers.add('Access-Control-Allow-Methods',
-                                'GET,PATCH,POST,DELETE,OPTIONS')
+                             'GET,PATCH,POST,DELETE,OPTIONS')
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
+
+    # create a small start page for app
 
     @app.route('/')
     def start():
         animals = Animal.query.order_by(Animal.id).all()
 
         if animals is None:
-            return jsonify({'message' : 'Hello there, currently there is no animal here!'
-                        })
+            return jsonify({'message': 'Hello there, currently' +
+                            'there is no animal here!'
+                            })
 
         else:
-            random_animal_number = random.randrange(1,len(animals)+1)
-            random_animal = Animal.query.filter(Animal.id==random_animal_number).one_or_none()
-            random_species = Species.query.filter(Species.id == random_animal.species_id).one_or_none()
+            random_animal_number = random.randrange(1, len(animals) + 1)
+            random_animal = Animal.query.filter(
+                Animal.id == random_animal_number).one_or_none()
+            random_species = Species.query.filter(
+                Species.id == random_animal.species_id).one_or_none()
 
-            return jsonify({'A message' : 'Hello there, the animal of the day is:',
-                            'Animal' : random_animal.name,
-                            'Comment' : random_animal.comment,
-                            'Species' : random_species.name,
-                            "Species Comment" : random_species.description
+            return jsonify({'A message': 'Hello there,' +
+                            'the animal of the day is:',
+                            'Animal': random_animal.name,
+                            'Comment': random_animal.comment,
+                            'Species': random_species.name,
+                            "Species Comment": random_species.description
                             })
+
+    # Get request for animals
 
     @app.route('/animals', methods=['GET'])
     @requires_auth('get:animals')
@@ -73,7 +82,7 @@ def create_app(test_config=None):
         # Abort if no animals are returned
         if animals is None:
             abort(404)
-        
+
         # Get all animals and format them
         active_animals = {}
         for animal in animals:
@@ -86,23 +95,26 @@ def create_app(test_config=None):
             'number': len(animals)
         })
 
+    # get request for a specific animal id
 
     @app.route('/animals/<int:animal_id>', methods=['GET'])
     @requires_auth('get:animals')
     def get_animals_by_id(token, animal_id):
         animals = Animal.query.order_by(Animal.id).all()
         # Abort if no animals are returned
-        
+
         if animals is None:
             abort(404)
 
-        animal_filtered = Animal.query.filter(Animal.id==animal_id).one_or_none()
-        
+        animal_filtered = Animal.query.filter(
+            Animal.id == animal_id).one_or_none()
+
         if animal_filtered is None:
             abort(404)
 
-        species = Species.query.filter(Species.id == animal_filtered.species_id).one_or_none()
-    
+        species = Species.query.filter(
+            Species.id == animal_filtered.species_id).one_or_none()
+
         # return the dictionary of animals and the number of animals
         return jsonify({
             'success': True,
@@ -110,6 +122,8 @@ def create_app(test_config=None):
             'Age': animal_filtered.age,
             'Species': species.name
         })
+
+    # Get request for listing species
 
     @app.route('/species', methods=['GET'])
     @requires_auth('get:animals')
@@ -120,7 +134,7 @@ def create_app(test_config=None):
         # Abort if no species are returned
         if species is None:
             abort(404)
-   
+
         # Format species in a dictionary
         active_species = {}
         for specie in species:
@@ -133,12 +147,14 @@ def create_app(test_config=None):
             'number': len(species)
         })
 
+    # post request for creating a new animal
+
     @app.route('/animals', methods=['POST'])
     @requires_auth('post:animals')
     def post_animal(token):
 
         body = request.get_json()
-    
+
         new_name = body.get('name', None)
         new_age = body.get('age', None)
         new_comment = body.get('comment', None)
@@ -155,17 +171,17 @@ def create_app(test_config=None):
             abort(400)
 
         try:
-            animal = Animal(name = new_name,
-                            age = new_age,
-                            comment = new_comment,
-                            species_id = new_species_id)
-            
+            animal = Animal(name=new_name,
+                            age=new_age,
+                            comment=new_comment,
+                            species_id=new_species_id)
+
             animal.insert()
-            
+
             animals = Animal.query.order_by(Animal.id).all()
-            species = Species.query.filter(Species.id == new_species_id).one_or_none()
-            # paginated_animals = paginate_animals(request, animals)
-            
+            species = Species.query.filter(
+                Species.id == new_species_id).one_or_none()
+
             return jsonify({
                 'success': True,
                 'created': animal.id,
@@ -173,11 +189,12 @@ def create_app(test_config=None):
                 'species': species.name,
                 'total_animals': len(animals)
             })
-        
+
         except Exception as e:
             print(e)
             abort(422)
 
+    # patch request for changing age of animal
 
     @app.route('/animals/<int:animal_id>', methods=['PATCH'])
     @requires_auth('post:animals')
@@ -204,6 +221,7 @@ def create_app(test_config=None):
             print(e)
             abort(422)
 
+    # delete request for deleting animal
 
     @app.route('/animals/<int:animal_id>', methods=['DELETE'])
     @requires_auth('delete:animals')
@@ -227,10 +245,8 @@ def create_app(test_config=None):
 
         except Exception as e:
             print(e)
-            abort(422)            
-        
-        
-        
+            abort(422)
+
     # error handlers for all expected errors
 
     @app.errorhandler(400)
@@ -265,11 +281,12 @@ def create_app(test_config=None):
             "message": "internal server error"
         }), 500
 
-
     return app
+
 
 app = create_app()
 
+
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=8080, debug=True)
+    # app.run(host='0.0.0.0', port=8080, debug=True)
     app.run()
