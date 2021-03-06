@@ -109,7 +109,7 @@ class FarmTestCase(unittest.TestCase):
         self.assertFalse(data['success'])
 
     def test_get_animals_via_id(self):
-        res = self.client().get('/animals/1', headers = {'Authorization' : farm_manager_header })
+        res = self.client().get('/animals/2', headers = {'Authorization' : farm_manager_header })
         data = json.loads(res.data)
         
         # Check for success of the test
@@ -129,7 +129,7 @@ class FarmTestCase(unittest.TestCase):
         json_age = {
             'age' : 9
         }
-        res = self.client().patch('/animals/1', json = json_age, headers = {'Authorization' : farm_manager_header })
+        res = self.client().patch('/animals/2', json = json_age, headers = {'Authorization' : farm_manager_header })
         data = json.loads(res.data)
         
         # Check for success of the test
@@ -164,13 +164,6 @@ class FarmTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertFalse(data['success'])
 
-    def test_delete_animal_error_auth(self):
-        res = self.client().delete('/animals/2', headers = {'Authorization' : farm_guest_header })
-        data = json.loads(res.data)
-        
-        # Check for success of test
-        self.assertEqual(res.status_code, 401)
-        self.assertFalse(data['success'])
 
 
 # Make the tests conveniently executable
