@@ -18,7 +18,7 @@ DB_PATH = 'postgresql+psycopg2://{}:{}@{}/{}'.format(
 
 # Heroku DB
 # DB_PATH = os.environ('DB_PATH')
-DB_PATH = os.environ.get('DB_PATH')
+DB_PATH = os.environ.get('DATABASE_URL')
 
 db = SQLAlchemy()
 
