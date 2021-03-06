@@ -1,4 +1,6 @@
 alembic==1.4.3
+astroid==2.2.5
+Click==7.0
 autopep8==1.5.4
 awscli==1.19.13
 Babel==2.9.0
