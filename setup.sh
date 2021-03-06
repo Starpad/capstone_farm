@@ -1,4 +1,4 @@
-export DB_PATH='postgres://rtmfcdettevdpc:1ab7e5292d255864ac4a0c67193aea7f994a0a5f8c16de26086b49c04206b0a4@ec2-50-19-176-236.compute-1.amazonaws.com:5432/df935uv7s2p4i8'
+export DATABASE_URL='postgres://rtmfcdettevdpc:1ab7e5292d255864ac4a0c67193aea7f994a0a5f8c16de26086b49c04206b0a4@ec2-50-19-176-236.compute-1.amazonaws.com:5432/df935uv7s2p4i8'
 export AUTH0_DOMAIN='starpad.eu.auth0.com'
 export ALGORITHMS=['RS256']
 export API_AUDIENCE='https://capfarm.herokuapp.com'
