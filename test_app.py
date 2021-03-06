@@ -28,7 +28,7 @@ class FarmTestCase(unittest.TestCase):
 
         # Heroku DB path
 
-        self.DB_PATH = 'postgres://rtmfcdettevdpc:1ab7e5292d255864ac4a0c67193aea7f994a0a5f8c16de26086b49c04206b0a4@ec2-50-19-176-236.compute-1.amazonaws.com:5432/df935uv7s2p4i8'
+        self.DB_PATH = os.environ.get('DB_PATH')
 
         setup_db(self.app, self.DB_PATH)
 
@@ -59,7 +59,9 @@ class FarmTestCase(unittest.TestCase):
     # Test post request
     def test_post_animal(self):
         res = self.client().post('/animals', json=self.new_animal,
-                                 headers={'Authorization': farm_manager_header})
+                                 headers={
+                                     'Authorization': farm_manager_header
+                                     })
         data = json.loads(res.data)
 
         # Check for success of creation
@@ -70,7 +72,9 @@ class FarmTestCase(unittest.TestCase):
     # Test post request error
     def test_post_animal_error(self):
         res = self.client().post('/animals', json=self.new_wrong_animal,
-                                 headers={'Authorization': farm_manager_header})
+                                 headers={
+                                     'Authorization': farm_manager_header
+                                     })
         data = json.loads(res.data)
 
         # Check for success of creation
@@ -145,7 +149,9 @@ class FarmTestCase(unittest.TestCase):
         }
         res = self.client().patch('/animals/2',
                                   json=json_age,
-                                  headers={'Authorization': farm_manager_header})
+                                  headers={
+                                      'Authorization': farm_manager_header
+                                      })
         data = json.loads(res.data)
 
         # Check for success of the test
@@ -160,7 +166,9 @@ class FarmTestCase(unittest.TestCase):
         }
         res = self.client().patch('/animals/2',
                                   json=json_age,
-                                  headers={'Authorization': farm_manager_header})
+                                  headers={
+                                      'Authorization': farm_manager_header
+                                      })
         data = json.loads(res.data)
 
         # Check for success of test
@@ -170,7 +178,9 @@ class FarmTestCase(unittest.TestCase):
     # Test delete request for animals
     def test_delete_animal(self):
         res = self.client().delete('/animals/1',
-                                   headers={'Authorization': farm_manager_header})
+                                   headers={
+                                       'Authorization': farm_manager_header
+                                       })
         data = json.loads(res.data)
 
         # Check for success of test
@@ -180,7 +190,9 @@ class FarmTestCase(unittest.TestCase):
     # Test delete request for animals error
     def test_delete_animal_error(self):
         res = self.client().delete('/animals/999',
-                                   headers={'Authorization': farm_manager_header})
+                                   headers={
+                                       'Authorization': farm_manager_header
+                                       })
         data = json.loads(res.data)
 
         # Check for success of test

@@ -17,7 +17,7 @@ DB_PATH = 'postgresql+psycopg2://{}:{}@{}/{}'.format(
 '''
 
 # Migrate local DB into Heroku DB
-DB_PATH = os.environ.get('variable_name')
+DB_PATH = os.environ.get('DB_PATH')
 
 db = SQLAlchemy()
 
@@ -140,17 +140,17 @@ def db_create_species():
         'The history of dogs is an old tale indeed. You could say as long as' +
         'there has been civilisation, ' +
         'there have been records of humans and dogs. Dogs were domesticated' +
-        'from wolves around 15,000 years ago. ' +
-        'New evidence suggests that dogs were first domesticated in East Asia,' +
+        'from wolves around 15,000 years ago. New evidence ' +
+        'suggests that dogs were first domesticated in East Asia,' +
         'possibly China. ' +
-        'Over time, the dog has developed into hundreds of breeds with a great' +
-        'degree of variation. ' +
+        'Over time, the dog has developed into hundreds of breeds with ' +
+        ' a great degree of variation. ' +
         'Dogs, like humans, are highly social animals and this similarity' +
         'in their overall behavioural ' +
         'pattern accounts for their trainability, playfulnes and ability' +
         'to fit into human households ' +
-        'and social situations. This similarity has earned dogs a unique position ' +
-        'in the realm of interspecies relationships.'
+        'and social situations. This similarity has earned dogs a ' +
+        'unique position in the realm of interspecies relationships.'
     ))
     species_dog.insert()
 
