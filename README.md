@@ -46,8 +46,7 @@ Setting the `FLASK_ENV` variable to `development` will detect file changes and r
 Setting the `FLASK_APP` variable to `app.py ` file to find the application. 
 
 ## REST API Documentation
-REVIEW_COMMENT
-```
+
 This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
 
 Endpoints
@@ -125,6 +124,10 @@ DELETE '/animals/<int:animal_id>'
     "total_animals": 2
 }
 
+## Authentification
+
+Login: audience=https://capfarm.herokuapp.com&response_type=token
+client_id=mKtioZo3JhgPPyeubzW4mm7qI7VdKAl1&redirect_uri=https://capfarm.herokuapp.com
 
 ## Testing
 To run the tests, run
