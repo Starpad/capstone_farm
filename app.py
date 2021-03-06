@@ -67,7 +67,7 @@ def create_app(test_config=None):
 
     @app.route('/animals', methods=['GET'])
     @requires_auth('get:animals')
-    def get_animals():
+    def get_animals(token):
         animals = Animal.query.order_by(Animal.id).all()
 
         # Abort if no animals are returned
@@ -89,7 +89,7 @@ def create_app(test_config=None):
 
     @app.route('/animals/<int:animal_id>', methods=['GET'])
     @requires_auth('get:animals')
-    def get_animals_by_id(animal_id):
+    def get_animals_by_id(token, animal_id):
         animals = Animal.query.order_by(Animal.id).all()
         # Abort if no animals are returned
         
@@ -113,7 +113,7 @@ def create_app(test_config=None):
 
     @app.route('/species', methods=['GET'])
     @requires_auth('get:animals')
-    def get_species():
+    def get_species(token):
 
         species = Species.query.order_by(Species.id).all()
 
@@ -135,7 +135,7 @@ def create_app(test_config=None):
 
     @app.route('/animals', methods=['POST'])
     @requires_auth('post:animals')
-    def post_animal():
+    def post_animal(token):
 
         body = request.get_json()
     
@@ -181,7 +181,7 @@ def create_app(test_config=None):
 
     @app.route('/animals/<int:animal_id>', methods=['PATCH'])
     @requires_auth('post:animals')
-    def patch_animals(animal_id):
+    def patch_animals(token, animal_id):
         body = request.get_json()
 
         try:
@@ -207,7 +207,7 @@ def create_app(test_config=None):
 
     @app.route('/animals/<int:animal_id>', methods=['DELETE'])
     @requires_auth('delete:animals')
-    def delete_animals(animal_id):
+    def delete_animals(token, animal_id):
         body = request.get_json()
 
         try:
