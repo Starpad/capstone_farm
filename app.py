@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, db_drop_and_create_all, Animal, Species
 import random
+from auth import AuthError, requires_auth
 
 ANIMALS_PER_PAGE = 10
 
@@ -65,6 +66,7 @@ def create_app(test_config=None):
                             })
 
     @app.route('/animals', methods=['GET'])
+    @requires_auth('get:animals')
     def get_animals():
         animals = Animal.query.order_by(Animal.id).all()
 
@@ -86,6 +88,7 @@ def create_app(test_config=None):
 
 
     @app.route('/animals/<int:animal_id>', methods=['GET'])
+    @requires_auth('get:animals')
     def get_animals_by_id(animal_id):
         animals = Animal.query.order_by(Animal.id).all()
         # Abort if no animals are returned
@@ -109,7 +112,9 @@ def create_app(test_config=None):
         })
 
     @app.route('/species', methods=['GET'])
+    @requires_auth('get:animals')
     def get_species():
+
         species = Species.query.order_by(Species.id).all()
 
         # Abort if no species are returned
@@ -129,7 +134,9 @@ def create_app(test_config=None):
         })
 
     @app.route('/animals', methods=['POST'])
+    @requires_auth('post:animals')
     def post_animal():
+
         body = request.get_json()
     
         new_name = body.get('name', None)
@@ -173,6 +180,7 @@ def create_app(test_config=None):
 
 
     @app.route('/animals/<int:animal_id>', methods=['PATCH'])
+    @requires_auth('post:animals')
     def patch_animals(animal_id):
         body = request.get_json()
 
@@ -198,6 +206,7 @@ def create_app(test_config=None):
 
 
     @app.route('/animals/<int:animal_id>', methods=['DELETE'])
+    @requires_auth('delete:animals')
     def delete_animals(animal_id):
         body = request.get_json()
 
