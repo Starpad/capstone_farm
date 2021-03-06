@@ -83,6 +83,30 @@ class FarmTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['animals'])
 
+    def test_get_animals_error(self):
+        res = self.client().get('/animals')
+        data = json.loads(res.data)
+        
+        # Check for success of the test
+        self.assertEqual(res.status_code, 500)
+        self.assertFalse(data['success'])
+    
+    def test_get_species(self):
+        res = self.client().get('/species', headers = {'Authorization' : farm_guest_header })
+        data = json.loads(res.data)
+        
+        # Check for success of the test
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['species'])
+
+    def test_get_species_error(self):
+        res = self.client().get('/species')
+        data = json.loads(res.data)
+        
+        # Check for success of the test
+        self.assertEqual(res.status_code, 500)
+        self.assertFalse(data['success'])
 
     def test_get_animals_via_id(self):
         res = self.client().get('/animals/1', headers = {'Authorization' : farm_manager_header })
