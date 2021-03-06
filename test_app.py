@@ -141,7 +141,7 @@ class FarmTestCase(unittest.TestCase):
         json_age = {
             'iamamnoage' : 9
         }
-        res = self.client().patch('/animals/1', json = json_age, headers = {'Authorization' : farm_manager_header })
+        res = self.client().patch('/animals/2', json = json_age, headers = {'Authorization' : farm_manager_header })
         data = json.loads(res.data)
         
         # Check for success of test
