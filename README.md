@@ -5,7 +5,7 @@
 ## Motivation
 
 This is the final project of the Full-Stack Web Developer Nanodegree. It should cover and test all topics from the course.
-I chose to create my own theme for the project and created a few endpoints for a virtual farm.
+I chose to create my own theme for the project and created a few endpoints for a virtual farm. The farm can have animals from a selection of species.
 
 The farm has to autohrization roles, one is the guest and the other is the farm manager.
 It will be described down below.
@@ -25,7 +25,7 @@ We recommend working within a virtual environment whenever using Python for proj
 Once you have your virtual environment setup and running, install dependencies by naviging to the `/backend` directory and running:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 This will install all of the required packages we selected within the `requirements.txt` file.
@@ -41,13 +41,29 @@ This will install all of the required packages we selected within the `requireme
 
 ## Running the server
 
-From within the `backend` directory first ensure you are working using your created virtual environment.
+From within the project directory first ensure you are working using your created virtual environment.
+
+All necessary credentials to run the project (including tests) are provided in the setup.sh file. Run the following command to enable the credentials:
+
+```bash
+source setup.sh
+```
 
 To run the server, execute:
 
 ```bash
 export FLASK_APP=app.py && export FLASK_ENV=development && flask run
 ```
+
+On Linux : export
+```bash
+export FLASK_APP=app.py;
+```
+On Windows : set
+```bash
+set FLASK_APP=app.py;
+```
+
 
 Setting the `FLASK_ENV` variable to `development` will detect file changes and restart the server automatically.
 
@@ -62,7 +78,7 @@ This file is the schema for the database and has some helper methods to simplyfy
 
 ## REST API Documentation
 
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
+In the following you can find the documentation of the endpoints from this application:
 
 Endpoints
 GET '/animals'
@@ -153,7 +169,7 @@ Auth0 is used as a third party authentication service. There are two roles for t
 - Manager: A manager can access all 'GET' endpoints, the 'POST' endpoint, the 'PATCH' endpoint and the 'DELETE' endpoint. He has the permissions 'get:animals', 'post:animals', 'delete:animals'
 
 
-Login: audience=https://capfarm.herokuapp.com&response_type=token
+Login: https://capfarm.herokuapp.com&response_type=token
 client_id=mKtioZo3JhgPPyeubzW4mm7qI7VdKAl1&redirect_uri=https://capfarm.herokuapp.com
 
 

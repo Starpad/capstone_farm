@@ -1,8 +1,19 @@
+import sys
 import os
-from flask import Flask, request, abort, jsonify
+from flask import (
+    Flask,
+    request,
+    abort,
+    jsonify
+    )
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db, db_drop_and_create_all, Animal, Species
+from models import (
+    setup_db,
+    db_drop_and_create_all,
+    Animal,
+    Species
+    )
 import random
 from auth import AuthError, requires_auth
 
@@ -35,7 +46,7 @@ def create_app(test_config=None):
     THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
     '''
 
-    # db_drop_and_create_all()
+    db_drop_and_create_all()
 
     @app.after_request
     def after_request(response):
@@ -155,10 +166,10 @@ def create_app(test_config=None):
 
         body = request.get_json()
 
-        new_name = body.get('name', None)
-        new_age = body.get('age', None)
-        new_comment = body.get('comment', None)
-        new_species_id = body.get('species_id', None)
+        new_name = body.get('name')
+        new_age = body.get('age')
+        new_comment = body.get('comment')
+        new_species_id = body.get('species_id')
 
         # check if any required input is missing and abort
         if new_name is None:
@@ -192,6 +203,7 @@ def create_app(test_config=None):
 
         except Exception as e:
             print(e)
+            print(sys.exc_info())
             abort(422)
 
     # patch request for changing age of animal
@@ -219,6 +231,7 @@ def create_app(test_config=None):
 
         except Exception as e:
             print(e)
+            print(sys.exc_info())
             abort(422)
 
     # delete request for deleting animal
@@ -245,6 +258,7 @@ def create_app(test_config=None):
 
         except Exception as e:
             print(e)
+            print(sys.exc_info())
             abort(422)
 
     # error handlers for all expected errors
