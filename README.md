@@ -62,6 +62,7 @@ GET '/animals'
 - Returns: The dictionary of animals id and name. Also it returns the number of
 animals and wether it was a success or not
 
+```json
 {
     "animals": {
         "1": "Freddy",
@@ -70,11 +71,12 @@ animals and wether it was a success or not
     "number": 2,
     "success": true
 }
-
+```
 GET '/species'
 - Fetches a dictionary of species from the farm
 - Request Arguments: None
 - Returns: The number of the different species and a dictionary of species id and name
+```json
 {
     "number": 4,
     "species": {
@@ -85,7 +87,7 @@ GET '/species'
     },
     "success": true
 }
-
+```
 POST '/animals'
 - Creates a new animal with the parameters name, age, comment and species id. Name and age are mandatory
 - Request Arguments: None
@@ -93,6 +95,7 @@ POST '/animals'
 ---> insert (1. string - name; 2. integer - age; 3. string - comment; 4. integer - species_id)
 - Example request JSON
 
+```json
 {
 	"name": "Spikes",
 	"species": "Guinea Pig",
@@ -100,9 +103,10 @@ POST '/animals'
     "comment": "Spike likes to run around.",
     "species_id": 4
 }
-
+```
 -Returns: Example
 
+```json
 {
     "animal_created": "Spikes",
     "created": 3,
@@ -110,20 +114,21 @@ POST '/animals'
     "success": true,
     "total_animals": 3
 }
-
+```
 DELETE '/animals/<int:animal_id>'
 - Deletes the selected animal
 - Request Arguments: animal id
 
 -Returns: Example
 
+```json
 {
     "deleted": 3,
     "deleted name": "Spikes",
     "success": true,
     "total_animals": 2
 }
-
+```
 ## Authentification
 
 Login: audience=https://capfarm.herokuapp.com&response_type=token
